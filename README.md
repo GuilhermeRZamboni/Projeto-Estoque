@@ -17,21 +17,17 @@ Instale dependências:
 ```sh
 pip install -r requirements.txt
 ```
-Configure `.env` com:
-- DB_NAME
-- DB_USER
-- DB_PASSWORD
-- DB_HOST
-- DB_PORT
 
 ## Como rodar
 1. Rodar o backend (na raiz do projeto):
 ```sh
-uvicorn backend.api:app --reload --host 127.0.0.1 --port 8000
+cd backend
+python -m uvicorn api:app --reload
 ```
 2. Rodar o frontend (em outro terminal):
 ```sh
-streamlit run h:\Projeto Estoque\frontend\app.py
+cd frontend
+streamlit run app.py
 ```
 
 ## Endpoints principais (FastAPI)
