@@ -37,14 +37,9 @@ streamlit run app.py
 - PUT /produtos/{id} — atualizar produto (params: preco, quantidade)
 - DELETE /produtos/{id} — deletar produto
 
-## Exemplos (curl)
-Adicionar:
-```sh
-curl -X POST "http://127.0.0.1:8000/produtos?nome=Mouse&categoria=Eletronicos&preco=220&quantidade=25"
-```
-Listar:
-```sh
-curl "http://127.0.0.1:8000/produtos"
-```
+## Clone este repositório
 
+```bash
+git clone https://github.com/GuilhermeRZamboni/Projeto-Estoque
+```
 ---
