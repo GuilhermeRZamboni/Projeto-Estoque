@@ -27,6 +27,11 @@ def listar_produtos():
         })
     return {"produtos": lista}
 
+@app.put("/produtos/{produto_id}") 
+def atualizar_produto(produto_id: int, nome: str, categoria: str, preco: float, quantidade: int):
+    funcao.atualizar_produto(produto_id, nome, categoria, preco, quantidade)
+    return {"mensagem": "Produto atualizado com sucesso!"}
+
 
 
 
