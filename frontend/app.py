@@ -8,3 +8,11 @@ st.title("Sistema de Gerenciamento de Estoque")
 menu = st.sidebar.radio("Menu", ["Todos Produtos","Adicionar Produto" , "Atualizar Produto", "Deletar Produto"])
 
 
+if menu == "Todos Produtos":
+    st.header("Lista de Produtos")
+    response = requests.get(f"{API_URL}/produtos")
+    if response.status_code == 200:
+        produtos = response.json().get("produtos", [])
+        st.dataframe(produtos)
+    else:
+        st.error("Erro ao buscar produtos")
