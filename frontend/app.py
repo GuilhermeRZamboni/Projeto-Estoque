@@ -16,3 +16,22 @@ if menu == "Todos Produtos":
         st.dataframe(produtos)
     else:
         st.error("Erro ao buscar produtos")
+elif menu == "Adicionar Produto":
+    st.header("Adicionar Novo Produto")
+    nome = st.text_input("Nome do Produto")
+    categoria = st.text_input("Categoria")
+    preco = st.number_input("Preço", min_value=0.0, format="%.2f")
+    quantidade = st.number_input("Quantidade", min_value=0)
+    if st.button("Adicionar Produto"):
+        dados = {
+            "nome": nome,
+            "categoria": categoria,
+            "preco": preco,
+            "quantidade": quantidade
+        }
+        response= requests.post(f"{API_URL}/produtos", params=dados)
+        if response.status_code == 200:
+            st.success("Produto adicionado com sucesso!")
+        else:
+            st.error("Erro ao adicionar produto")
+
