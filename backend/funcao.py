@@ -8,7 +8,7 @@ def criar_tabela():
                 id SERIAL PRIMARY KEY,
                 nome VARCHAR(100) NOT NULL,
                 categoria VARCHAR(50),
-                preco DECIMAL(10,2),
+                preco NUMERIC,
                 quantidade INT);""")
             conexao.commit()
 
@@ -34,14 +34,14 @@ def adicionar_produto(nome, categoria, preco, quantidade):
             cursor.close()
             conexao.close()
 
-# adicionar_produto("Teclado", "Eletrônicos", 150.00, 30)
+# adicionar_produto("Mouse", "Eletrônicos", 220, 25)
 
 def listar_produtos(): 
     conexao, cursor = conectar()
     produtos = []
     if conexao:
         try:
-            cursor.execute("SELECT * FROM produtos;")
+            cursor.execute("SELECT * FROM produtos ORDER BY id;")
             return cursor.fetchall()
         except Exception as erro:
             print(f"Erro ao listar produtos: {erro}")
@@ -72,13 +72,13 @@ def atualizar_produto(id, preco, quantidade):
                                     SET quantidade = %s
                                     WHERE id = %s;""",
                                 (quantidade, id))
-                    conexao.commit()
+            conexao.commit()
         except Exception as erro:
             print(f"Erro ao atualizar produto: {erro}")
         finally:
             cursor.close()
             conexao.close()
-atualizar_produto(1, 100.00, 10)
+# atualizar_produto(2, 100.00, 10)
 def deletar_produto(id):
     conexao, cursor = conectar()
     if conexao:
