@@ -4,7 +4,6 @@ import funcao
 app = FastAPI(title="Gerenciador de Produtos")
 
 @app.get("/")
-
 def saudacao():
     return {"mensagem": "Bem-vindo ao gerenciador de Produtos!"}
 
@@ -27,7 +26,7 @@ def listar_produtos():
         })
     return {"produtos": lista}
 
-@app.put("/produtos/{produto_id}") 
+@app.put("/produtos/{produto_id}")
 def atualizar_produto(produto_id: int, preco: float, quantidade: int):
     funcao.atualizar_produto(produto_id, preco, quantidade)
     return {"mensagem": "Produto atualizado com sucesso!"}

@@ -17,7 +17,7 @@ def criar_tabela():
         finally:
             cursor.close()
             conexao.close()
-# criar_tabela()
+criar_tabela()
 
 
 def adicionar_produto(nome, categoria, preco, quantidade):
@@ -49,7 +49,7 @@ def listar_produtos():
             cursor.close()
             conexao.close()
 
-print(listar_produtos())
+# print(listar_produtos())
 
 def atualizar_produto(id, preco, quantidade):
     conexao, cursor = conectar()
@@ -90,3 +90,5 @@ def deletar_produto(id):
         finally:
             cursor.close()
             conexao.close()
+            
+

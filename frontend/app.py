@@ -7,6 +7,12 @@ st.title("Sistema de Gerenciamento de Estoque")
 
 menu = st.sidebar.radio("Menu", ["Todos Produtos","Adicionar Produto" , "Atualizar Produto", "Deletar Produto"])
 
+response = requests.get(f"{API_URL}/produtos")
+if response.status_code == 200:
+    dados = response.json().get("produtos", [])
+    ids = [item['id'] for item in dados]
+else:
+    st.error("Erro ao buscar IDs dos produtos")
 
 if menu == "Todos Produtos":
     st.header("Lista de Produtos")
@@ -37,7 +43,15 @@ elif menu == "Adicionar Produto":
 
 elif menu == "Atualizar Produto":
     st.header("Atualizar Produto")
-    id = st.number_input("ID do Produto", min_value=1)
+    id = st.selectbox("Selecione o ID do Produto", ids)
+    response = requests.get(f"{API_URL}/produtos")
+    if response.status_code == 200:
+        produtos = response.json().get("produtos", [])
+        produto_selecionado = next((item for item in produtos if item["id"] == id), None)
+        if produto_selecionado:
+            st.dataframe([produto_selecionado])
+    else:
+        st.error("Erro ao buscar detalhes do produto")
     preco = st.number_input("Novo Preço (-1 para não alterar)", value=-1.0, format="%.2f")
     quantidade = st.number_input("Nova Quantidade (-1 para não alterar)", value=-1)
     if st.button("Atualizar Produto"):
@@ -53,7 +67,15 @@ elif menu == "Atualizar Produto":
 
 elif menu == "Deletar Produto":
     st.header("Deletar Produto")
-    id = st.number_input("ID do Produto", min_value=1)
+    id = st.selectbox("Selecione o ID do Produto", ids)
+    response = requests.get(f"{API_URL}/produtos")
+    if response.status_code == 200:
+        produtos = response.json().get("produtos", [])
+        produto_selecionado = next((item for item in produtos if item["id"] == id), None)
+        if produto_selecionado:
+            st.dataframe([produto_selecionado])
+    else:
+        st.error("Erro ao buscar detalhes do produto")
     if st.button("Deletar Produto"):
         response = requests.delete(f"{API_URL}/produtos/{id}")
         if response.status_code == 200:
