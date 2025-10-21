@@ -1,5 +1,6 @@
 import streamlit as st
 import requests 
+import time
 API_URL = "http://127.0.0.1:8000"
 
 st.set_page_config(page_title="Sistema de Gerenciamento de Estoque", layout="wide", page_icon="📦")
@@ -38,47 +39,59 @@ elif menu == "Adicionar Produto":
         response= requests.post(f"{API_URL}/produtos", params=dados)
         if response.status_code == 200:
             st.success("Produto adicionado com sucesso!")
+            time.sleep(2)
+            st.rerun()  
         else:
             st.error("Erro ao adicionar produto")
 
 elif menu == "Atualizar Produto":
     st.header("Atualizar Produto")
-    id = st.selectbox("Selecione o ID do Produto", ids)
-    response = requests.get(f"{API_URL}/produtos")
-    if response.status_code == 200:
-        produtos = response.json().get("produtos", [])
-        produto_selecionado = next((item for item in produtos if item["id"] == id), None)
-        if produto_selecionado:
-            st.dataframe([produto_selecionado])
+    if not ids:
+        st.warning("Nenhum produto disponível para atualizar.")
     else:
-        st.error("Erro ao buscar detalhes do produto")
-    preco = st.number_input("Novo Preço (-1 para não alterar)", value=-1.0, format="%.2f")
-    quantidade = st.number_input("Nova Quantidade (-1 para não alterar)", value=-1)
-    if st.button("Atualizar Produto"):
-        dados = {
-            "preco": preco,
-            "quantidade": quantidade
-        }
-        response = requests.put(f"{API_URL}/produtos/{id}", params=dados)
+        id = st.selectbox("Selecione o ID do Produto", ids)
+        response = requests.get(f"{API_URL}/produtos")
         if response.status_code == 200:
-            st.success("Produto atualizado com sucesso!")
+            produtos = response.json().get("produtos", [])
+            produto_selecionado = next((item for item in produtos if item["id"] == id), None)
+            if produto_selecionado:
+                st.dataframe([produto_selecionado])
         else:
-            st.error("Erro ao atualizar produto")
+            st.error("Erro ao buscar detalhes do produto")
+        preco = st.number_input("Novo Preço (-1 para não alterar)", value=-1.0, format="%.2f")
+        quantidade = st.number_input("Nova Quantidade (-1 para não alterar)", value=-1)
+        if st.button("Atualizar Produto"):
+            dados = {
+                "preco": preco,
+                "quantidade": quantidade
+            }
+            response = requests.put(f"{API_URL}/produtos/{id}", params=dados)
+            if response.status_code == 200:
+                st.success("Produto atualizado com sucesso!")
+                time.sleep(2)
+                st.rerun()
+            else:
+                st.error("Erro ao atualizar produto")
 
 elif menu == "Deletar Produto":
     st.header("Deletar Produto")
-    id = st.selectbox("Selecione o ID do Produto", ids)
-    response = requests.get(f"{API_URL}/produtos")
-    if response.status_code == 200:
-        produtos = response.json().get("produtos", [])
-        produto_selecionado = next((item for item in produtos if item["id"] == id), None)
-        if produto_selecionado:
-            st.dataframe([produto_selecionado])
-    else:
-        st.error("Erro ao buscar detalhes do produto")
-    if st.button("Deletar Produto"):
-        response = requests.delete(f"{API_URL}/produtos/{id}")
+    if ids:
+        id = st.selectbox("Selecione o ID do Produto", ids)
+        response = requests.get(f"{API_URL}/produtos")
         if response.status_code == 200:
-            st.success("Produto deletado com sucesso!")
+            produtos = response.json().get("produtos", [])
+            produto_selecionado = next((item for item in produtos if item["id"] == id), None)
+            if produto_selecionado:
+                st.dataframe([produto_selecionado])
         else:
-            st.error("Erro ao deletar produto")
+            st.error("Erro ao buscar detalhes do produto")
+        if st.button("Deletar Produto"):
+            response = requests.delete(f"{API_URL}/produtos/{id}")
+            if response.status_code == 200:
+                st.success("Produto deletado com sucesso!")
+                time.sleep(2)
+                st.rerun()
+            else:
+                st.error("Erro ao deletar produto")
+    else:
+        st.info("Nenhum produto disponível para deletar.")
